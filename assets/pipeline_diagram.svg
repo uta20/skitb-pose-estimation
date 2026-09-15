@@ -1,0 +1,75 @@
+<svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <defs>
+    <style>
+      .box { fill: #f4f6f8; stroke: #333; stroke-width: 2; }
+      .label { fill: #222; font-size: 16px; font-weight: 600; }
+      .sub { fill: #555; font-size: 12px; }
+      .arrow { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); fill: none; }
+      .skel { stroke: #2e7d32; stroke-width: 3; }
+      .joint { fill: #f9a825; stroke: #7a5c00; stroke-width: 1; }
+      .bbox { fill: none; stroke: #1565c0; stroke-width: 2; stroke-dasharray: 4 3; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- 1. 入力フレーム(概念図。実際の放送映像は含まない) -->
+  <g transform="translate(20,40)">
+    <rect class="box" x="0" y="0" width="220" height="220" rx="6"/>
+    <text class="label" x="110" y="-14" text-anchor="middle">1. 入力フレーム</text>
+    <text class="sub" x="110" y="238" text-anchor="middle">(概念図。実データはSkiTB提供)</text>
+    <!-- 簡略化した選手シルエット -->
+    <circle cx="110" cy="60" r="14" fill="#607d8b"/>
+    <line x1="110" y1="74" x2="110" y2="150" stroke="#607d8b" stroke-width="10" stroke-linecap="round"/>
+    <line x1="110" y1="150" x2="90" y2="200" stroke="#607d8b" stroke-width="8" stroke-linecap="round"/>
+    <line x1="110" y1="150" x2="130" y2="200" stroke="#607d8b" stroke-width="8" stroke-linecap="round"/>
+    <rect class="bbox" x="75" y="45" width="70" height="165"/>
+  </g>
+
+  <path class="arrow" d="M250,150 L300,150"/>
+
+  <!-- 2. BBoxクロップ -->
+  <g transform="translate(310,70)">
+    <rect class="box" x="0" y="0" width="150" height="160" rx="6"/>
+    <text class="label" x="75" y="-14" text-anchor="middle">2. BBoxクロップ</text>
+    <circle cx="75" cy="30" r="12" fill="#607d8b"/>
+    <line x1="75" y1="42" x2="75" y2="105" stroke="#607d8b" stroke-width="9" stroke-linecap="round"/>
+    <line x1="75" y1="105" x2="58" y2="150" stroke="#607d8b" stroke-width="7" stroke-linecap="round"/>
+    <line x1="75" y1="105" x2="92" y2="150" stroke="#607d8b" stroke-width="7" stroke-linecap="round"/>
+    <rect class="bbox" x="10" y="10" width="130" height="140"/>
+  </g>
+
+  <path class="arrow" d="M470,150 L520,150"/>
+
+  <!-- 3. 姿勢推定(キーポイント) -->
+  <g transform="translate(530,70)">
+    <rect class="box" x="0" y="0" width="160" height="160" rx="6"/>
+    <text class="label" x="80" y="-14" text-anchor="middle">3. 姿勢推定</text>
+    <!-- 骨格(棒人間) -->
+    <line class="skel" x1="80" y1="35" x2="80" y2="80"/>
+    <line class="skel" x1="80" y1="45" x2="55" y2="65"/>
+    <line class="skel" x1="80" y1="45" x2="105" y2="65"/>
+    <line class="skel" x1="80" y1="80" x2="65" y2="120"/>
+    <line class="skel" x1="80" y1="80" x2="95" y2="120"/>
+    <circle class="joint" cx="80" cy="25" r="8"/>
+    <circle class="joint" cx="80" cy="45" r="5"/>
+    <circle class="joint" cx="55" cy="65" r="5"/>
+    <circle class="joint" cx="105" cy="65" r="5"/>
+    <circle class="joint" cx="80" cy="80" r="5"/>
+    <circle class="joint" cx="65" cy="120" r="5"/>
+    <circle class="joint" cx="95" cy="120" r="5"/>
+    <text class="sub" x="80" y="150" text-anchor="middle">COCO 17キーポイント</text>
+  </g>
+
+  <path class="arrow" d="M700,150 L750,150"/>
+
+  <!-- 4. 出力 -->
+  <g transform="translate(760,90)">
+    <rect class="box" x="0" y="0" width="120" height="120" rx="6"/>
+    <text class="label" x="60" y="-14" text-anchor="middle">4. 出力</text>
+    <text class="sub" x="60" y="45" text-anchor="middle">keypoints.csv</text>
+    <text class="sub" x="60" y="65" text-anchor="middle">*_pose.jpg</text>
+    <text class="sub" x="60" y="85" text-anchor="middle">(座標 + 信頼度)</text>
+  </g>
+</svg>

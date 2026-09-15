@@ -1,0 +1,25 @@
+[project]
+name = "skitb-pose-estimation"
+version = "0.1.0"
+description = "SkiTBデータセットを用いたスキージャンプ選手の姿勢推定パイプライン"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "opencv-python-headless>=5.0.0.93",
+    "pandas>=3.0.5",
+    "ultralytics>=8.4.149",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

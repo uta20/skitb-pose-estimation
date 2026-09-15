@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Ultralytics / pytest
+*.pt
+runs/
+.pytest_cache/
+
+# 姿勢推定の生成物(再実行すれば復元できるためコミット対象外)
+outputs/
+
+# SkiTBの動画フレーム画像(*.jpg等)はリポジトリに含めない
+# 公式READMEより"annotation files" に限定して公開する
+# 画像フレームは公式サイトから別途取得する運用とする
+data/**/frames/
+assets/sample_output/*.jpg
+assets/sample_output/*.png
