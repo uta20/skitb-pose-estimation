@@ -1,7 +1,7 @@
 """SkiTBのシーケンスフォルダを管理するための軽量ローダー
 
 SkiTB の各シーケンスフォルダは以下の構造を持つ:
-    JP00xx/
+    JP0xxx/
       frames/            *.jpg フレーム画像
       MC/                MC(マルチカメラ)設定でのアノテーション
         boxes.txt        [x, y, w, h] 各行1フレーム分のBBox(左上座標+幅高さ)
@@ -11,7 +11,7 @@ SkiTB の各シーケンスフォルダは以下の構造を持つ:
       SC/<camera_id>/    SC(単一カメラ)設定での同様のアノテーション
 
 本モジュールはこれらのテキストファイルを読み込み、フレーム番号をキーに
-BBox・可視性・カメラIDへ簡単にアクセスできる `SkiSequence` を提供する。
+BBox・可視性・カメラIDへ簡単にアクセスできる `SkiSequence` を提供する
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -132,7 +132,28 @@ class SkiSequence:
             for fid, box, vis in zip(frame_ids, boxes, visibilities)
         ]
         return cls(f"{sequence_dir.name}_cam{camera_id}", annotations, frames_dir)
-    
+
+def discover_sequences(data_root: Path, category: str = "JP") -> list[str]:
+    """
+    ``data_root`` 直下から、有効なシーケンスフォルダのIDを検出
+
+    「有効」とは ``<data_root>/<category>####/MC/boxes.txt`` が存在することを指す
+    (アノテーションさえあれば、frames/ が空でも一覧には含まれる
+    実際に処理可能かどうかは ``SkiSequence.available_frame_ids()`` 側で判定する)
+
+    Examples
+    --------
+    >>> discover_sequences(Path("data"), category="JP")
+    ['JP0001', 'JP0002', ...]
+    """
+    data_root = Path(data_root)
+    sequence_ids = []
+    for entry in sorted(data_root.iterdir()):
+        if not entry.is_dir() or not entry.name.startswith(category):
+            continue
+        if (entry / "MC" / "boxes.txt").exists():
+            sequence_ids.append(entry.name)
+    return sorted(sequence_ids)
 
 def _read_int_lines(path: Path) -> list[int]:
     with path.open("r", encoding="utf-8") as f:

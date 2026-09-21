@@ -6,8 +6,8 @@
 
 | | |
 |---|---|
-| **現在の状態** | v0.1 — `JP0001` の1フレームで姿勢推定パイプラインが動作確認済み |
-| **次のマイルストーン** | `JP0001`〜`JP0100` 全シーケンスへの拡張|
+| **現在の状態** | v0.2 — 処理ロジックを`src/pipeline.py`に切り出し, `scripts/run_pose_estimation.py`を単一/複数(カンマ区切り)/全シーケンス(`--sequence all`)対応のバッチ処理CLIに拡張 |
+| **次のマイルストーン** | v0.2.1 - フルデータ(`JP0001`の全317フレーム、3カメラ切り替えを含む)を用いた通しでの動作確認・カメラ切り替え点でのBBox不連続への対処|
 | **対象** | スキージャンプ (`JP`)。データセット自体は他にアルペン (`AL`)・フリースタイル (`FS`) も収録 |
 
 ---
@@ -44,6 +44,7 @@
 | 姿勢推定 | [Ultralytics YOLOv8-pose](https://docs.ultralytics.com/tasks/pose/)(`yolov8n-pose`) | 単一ステージで人物検出+17キーポイント推定を行える実装が容易なベースライン。軽量モデルから始め、精度検証のうえで大きいモデルやファインチューニングへ移行する方針 |
 | 画像処理 | OpenCV | BBoxクロップ・描画 |
 | データ処理 | pandas | キーポイント時系列の集計・特徴量抽出(拡張予定) |
+| 進捗表示 | tqdm | 全シーケンスバッチ処理時の進捗バー表示 |
 | テスト | pytest | アノテーションパーサ・クロップ処理のユニットテスト |
 | Lint | ruff | コード品質の担保 |
 
@@ -71,16 +72,18 @@ ski-pose-estimation/
 │   ├── metadata.py         # メタデータ・split・視覚属性の統合ローダー
 │   ├── crop.py             # BBoxクロップ・マージン付与
 │   ├── pose.py             # YOLOv8-poseラッパー
+│   ├── pipeline.py         # 1シーケンス分の姿勢推定処理(CLIから独立、単一/バッチ両対応)
 │   └── visualize.py        # キーポイント・骨格の描画
 ├── scripts/
-│   ├── run_pose_estimation.py      # CLIエントリポイント(姿勢推定)
+│   ├── run_pose_estimation.py      # CLIエントリポイント(単一/複数/全シーケンス対応)
 │   └── build_dataset_manifest.py   # メタデータ統合マニフェスト生成
 ├── assets/
 │   └── pipeline_diagram.svg   # README掲載用の自作概念図
 ├── outputs/                # 推論結果の出力先
 └── tests/
     ├── test_dataset.py
-    └── test_metadata.py
+    ├── test_metadata.py
+    └── test_pipeline.py
 ```
 
 ---
@@ -135,14 +138,28 @@ uv run scripts/run_pose_estimation.py --sequence JP0001 --frame 63
 
 # クロップ時のマージンやモデルを変更
 uv run scripts/run_pose_estimation.py --sequence JP0001 --margin 0.3 --model yolov8s-pose.pt
+
+# 複数シーケンスをカンマ区切りで指定
+uv run scripts/run_pose_estimation.py --sequence JP0001,JP0002,JP0003
+
+# data/ 直下で検出できる全シーケンス(JP0001〜JP0100)を一括処理
+uv run scripts/run_pose_estimation.py --sequence all
+
+# 動作確認のため、全件のうち先頭5シーケンスだけに絞って試す
+uv run scripts/run_pose_estimation.py --sequence all --limit 5
+
+# 可視化画像の保存を省略しCSV出力のみに絞る(大量データの高速化)
+uv run scripts/run_pose_estimation.py --sequence all --no-images
 ```
 
 出力は `outputs/<sequence>/` 以下に、
 
-- `<frame_id>_pose.jpg`: キーポイント可視化画像
-- `keypoints.csv`: 全フレームのキーポイント座標・信頼度
+- `<frame_id>_pose.jpg`: キーポイント可視化画像(`--no-images`指定時は省略)
+- `keypoints.csv`: 各シーケンスのキーポイント座標・信頼度
 
-として保存されます。
+として保存されます。2件以上のシーケンスを処理した場合は、`outputs/summary.csv`に全シーケンス分の処理結果(フレーム数・検出率・エラー有無)がまとめて出力され、どのシーケンスで検出に失敗しているかを一覧で確認可能
+
+処理ロジック本体は`src/pipeline.py`の`process_sequence()`に切り出してあり、CLIスクリプトはシーケンスの選び方(単一/カンマ区切り/`all`)を解釈してループを回すだけの薄いラッパー. ノートブックや別スクリプトから直接呼び出しも可能
 
 ---
 ## メタデータ・train/test分割の活用
@@ -160,9 +177,10 @@ SkiTB公式配布物には、映像アノテーション(`MC/`, `SC/`)とは別�
 ## ロードマップ
 
 - [x] **v0.1**: `JP0001`のアノテーション(MC)パーサ・BBoxクロップ・YOLOv8-pose推論・可視化・CSV出力までの一連のパイプラインを実装し、単一フレームで動作確認
-- [ ] **v0.1.1**: `JP_data.csv`・`JP_visual_attributes.csv`・6種類のtrain/val/test分割定義を統合するメタデータモジュールとマニフェスト生成スクリプトを実装(全100シーケンス対応を確認)
-- [ ] **v0.2**: `frames/`ディレクトリに全フレームを配置し、`JP0001`の全317フレーム(3カメラ切り替えを含む)を通しで処理。カメラ切り替え点でのBBox不連続への対処
-- [ ] **v0.3**: `JP0002`〜`JP0100`へバッチ処理を拡張(`data/`直下のsplit定義を用いて優先順位づけ)。`visibilities.txt`が`0`のフレーム(選手が50%以上隠れている)を除外した評価パイプラインの整備
+- [x] **v0.1.1**: `JP_data.csv`・`JP_visual_attributes.csv`・6種類のtrain/val/test分割定義を統合するメタデータモジュールとマニフェスト生成スクリプトを実装(全100シーケンス対応を確認)
+- [x] **v0.2**: 処理ロジックを`src/pipeline.py`に切り出し、`scripts/run_pose_estimation.py`を単一/複数(カンマ区切り)/全シーケンス(`--sequence all`)対応のバッチ処理CLIに拡張。`src/dataset.py`にシーケンス自動検出(`discover_sequences`)を追加し、`outputs/summary.csv`で全シーケンスの検出率を一覧確認できるようにした
+- [ ] **v0.2.1**: フルデータ(`JP0001`の全317フレーム、3カメラ切り替えを含む)を用いた通しでの動作確認・カメラ切り替え点でのBBox不連続への対処(リポジトリ公開後に実施予定)
+- [ ] **v0.3**: `JP0002`〜`JP0100`全件をバッチ処理し、検出率・処理時間などの実測値をREADMEに追記。`data/`直下のsplit定義を用いた優先順位づけ(例: date-splitのtest集合を先に処理)
 - [ ] **v0.4**: キーポイントから力学的特徴量(踏切時の前傾角度、空中姿勢のV字角度、体幹の左右対称性など)を抽出し、卒業研究のCFD解析結果(揚力・抗力係数)と突き合わせる分析ノートブックを追加
 - [ ] **v0.5**: 精度評価(SkiTBの可視性ラベルを正解として、検出失敗率・キーポイント信頼度の分布を定量化)を行い、必要に応じてスキー特有の姿勢に対するファインチューニングを実施
 - [ ] **将来検討**: 100シーケンス規模のバッチ推論をクラウド上のジョブ(例: コンテナ化してGPUインスタンス/バッチサービス上で並列実行)として構成し、スケーラブルな推論基盤としての設計を検討

@@ -1362,6 +1362,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "opencv-python-headless" },
     { name = "pandas" },
+    { name = "tqdm" },
     { name = "ultralytics" },
 ]
 
@@ -1376,6 +1377,7 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "opencv-python-headless", specifier = ">=5.0.0.93" },
     { name = "pandas", specifier = ">=3.0.5" },
+    { name = "tqdm", specifier = ">=4.70.1" },
     { name = "ultralytics", specifier = ">=8.4.149" },
 ]
 
@@ -1465,6 +1467,18 @@ wheels = [
 ]
 
 [[package]]
+name = "tqdm"
+version = "4.70.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0d/ea/b2a5bd54b28a324dae8211928b2d730b6547500342c7e6c6dea08bd0a485/tqdm-4.70.1.tar.gz", hash = "sha256:cefd0eca11b2a37a3aee776544d4f4ae913f02688135b5556b8788dfa474afc4", size = 171846, upload-time = "2026-09-11T07:25:16.601Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/03/921a3d3c75785aca9ebfbfcabfbc3a1be12e2ab5265deb026d55a5a3f83e/tqdm-4.70.1-py3-none-any.whl", hash = "sha256:c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73", size = 80199, upload-time = "2026-09-11T07:25:14.599Z" },
+]
+
+[[package]]
 name = "triton"
 version = "3.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1499,7 +1513,7 @@ wheels = [
 
 [[package]]
 name = "ultralytics"
-version = "8.4.149"
+version = "8.4.157"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cloudpickle" },
@@ -1518,21 +1532,21 @@ dependencies = [
     { name = "ultralytics-platform" },
     { name = "ultralytics-thop" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/73/8f/f6ea1b85fb2d20fc313c8b13805f1f28041da7f1541774d69c442f7ffd98/ultralytics-8.4.149.tar.gz", hash = "sha256:fa158e6413ccf78e2268632b7838d280a172a2a285d0970528b84e3c78a6950f", size = 1228624, upload-time = "2026-09-12T06:21:18.795Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3f/40/ab1dabd033848514c5cf2ac5de5eddfa93cd88d9ec46eb0b8c0d81e19140/ultralytics-8.4.157.tar.gz", hash = "sha256:e6ca945f26f7c642a742439115787c9bfe4379a017180aa9b8fb952feab2f127", size = 1234355, upload-time = "2026-09-20T13:59:24.119Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cd/b8/1bb20062b1e1536e81e640db21fdf8342d07e0006af01dabb88d04d3a385/ultralytics-8.4.149-py3-none-any.whl", hash = "sha256:71534de12a37556cf001acba60cb15ec83d1757a843e8a8708b497d67434fbda", size = 1445584, upload-time = "2026-09-12T06:21:13.48Z" },
+    { url = "https://files.pythonhosted.org/packages/59/05/a557be380143810f12b7b263206d03842348dde92073994180b08ffb3886/ultralytics-8.4.157-py3-none-any.whl", hash = "sha256:66d70a59abbb9ec04592b3f8c22df731236e2b5da31b8df226b11d1b9f9d1eea", size = 1450713, upload-time = "2026-09-20T13:59:20.204Z" },
 ]
 
 [[package]]
 name = "ultralytics-platform"
-version = "0.1.40"
+version = "0.1.50"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/68/74/db78526d55de6d1ec5438fd664846156bdd7cd9db485b4e4686fc635bd2d/ultralytics_platform-0.1.40.tar.gz", hash = "sha256:6f2439fc5508d4fc2b7093396a397c555562759567451f61d1b8a7e503dd9717", size = 64213, upload-time = "2026-09-11T12:48:11.334Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/fd/f5159dd2e8ddadb26e9765d46ca2e80bd67b8b5b2982d23f3ebc32fa6d5f/ultralytics_platform-0.1.50.tar.gz", hash = "sha256:ca75fb2120596b0d0ecfe79e501dca268d23c5fa1a79b81ffa0876f6d1a26945", size = 78676, upload-time = "2026-09-21T00:42:49.364Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/91/e77c0dae8a321b328a78d4524f27b4e3a9ab44f4a3a033c91d28ae003706/ultralytics_platform-0.1.40-py3-none-any.whl", hash = "sha256:f368312f22f778cade012dabed24ed43741ad65ecf5ddb698c4ee641c6a62b53", size = 75762, upload-time = "2026-09-11T12:48:09.797Z" },
+    { url = "https://files.pythonhosted.org/packages/9d/3a/85d472974859dcd962fb513403df389456ddd7f1ed96de0a3445ea9f1d2e/ultralytics_platform-0.1.50-py3-none-any.whl", hash = "sha256:f14a31a00cec3073de99f6df26b1d9d0b39623307d3efa8eab4c3d53334fa413", size = 87968, upload-time = "2026-09-21T00:42:48.014Z" },
 ]
 
 [[package]]
