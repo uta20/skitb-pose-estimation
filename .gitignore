@@ -22,5 +22,3 @@ outputs/
 # 公式READMEより"annotation files" に限定して公開する
 # 画像フレームは公式サイトから別途取得する運用とする
 data/**/frames/
-assets/sample_output/*.jpg
-assets/sample_output/*.png
