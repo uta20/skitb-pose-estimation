@@ -1,8 +1,10 @@
 """キーポイントとBBoxをフレーム画像上に描画するユーティリティ"""
 
 from __future__ import annotations
+
 import cv2
 import numpy as np
+
 from .pose import COCO_KEYPOINT_NAMES, PoseResult
 
 # COCO 17キーポイントの骨格接続(index同士)

@@ -37,8 +37,10 @@
 """
 
 from __future__ import annotations
+
 import json
 from pathlib import Path
+
 import pandas as pd
 
 # JP_visual_attributes.csv の属性列とその意味(README/参照コメント用)

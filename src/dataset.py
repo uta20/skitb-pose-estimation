@@ -14,8 +14,10 @@ SkiTB の各シーケンスフォルダは以下の構造を持つ:
 BBox・可視性・カメラIDへ簡単にアクセスできる `SkiSequence` を提供する
 """
 from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
+
 
 @dataclass(frozen=True)
 class FrameAnnotation:

@@ -31,8 +31,11 @@ outputs:
     uv run scripts/build_dataset_manifest.py
 """
 from __future__ import annotations
+
 from pathlib import Path
+
 import pandas as pd
+
 from src.metadata import build_manifest, load_visual_attributes
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

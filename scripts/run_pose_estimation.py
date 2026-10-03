@@ -30,10 +30,13 @@
 """
 
 from __future__ import annotations
+
 import argparse
 import csv
 from pathlib import Path
+
 from tqdm import tqdm
+
 from src.dataset import discover_sequences
 from src.pipeline import SequenceResult, process_sequence
 from src.pose import PoseEstimator

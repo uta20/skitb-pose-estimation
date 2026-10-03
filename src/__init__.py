@@ -12,6 +12,7 @@ SkiTBデータセットを用いたスキージャンプ選手の姿勢推定パ
 """
 
 from .dataset import FrameAnnotation, SkiSequence
+from .features import PoseFeatures, extract_features
 from .metadata import (
     build_manifest,
     load_sequence_data,
@@ -19,19 +20,25 @@ from .metadata import (
     load_visual_attributes,
     split_membership,
 )
+from .pipeline import SequenceResult, process_sequence
 from .pose import PoseEstimator, PoseResult
 from .visualize import draw_pose, keypoints_to_dict
 
 __all__ = [
     "FrameAnnotation",
     "PoseEstimator",
+    "PoseFeatures",
     "PoseResult",
+    "SequenceResult",
     "SkiSequence",
     "build_manifest",
+    "discover_sequences",
     "draw_pose",
+    "extract_features",
     "keypoints_to_dict",
     "load_sequence_data",
     "load_split",
     "load_visual_attributes",
+    "process_sequence",
     "split_membership",
 ]

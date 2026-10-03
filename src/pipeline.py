@@ -6,10 +6,13 @@
 """
 
 from __future__ import annotations
+
 import csv
 from dataclasses import dataclass
 from pathlib import Path
+
 import cv2
+
 from .crop import crop_image, expand_box
 from .dataset import SkiSequence
 from .pose import COCO_KEYPOINT_NAMES, PoseEstimator

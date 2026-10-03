@@ -8,7 +8,9 @@ COCO形式の17キーポイント (鼻, 両目, 両耳, 両肩, 両肘, 両手�
 """
 
 from __future__ import annotations
+
 from dataclasses import dataclass
+
 import numpy as np
 
 # COCO 17キーポイントの名称(Ultralytics/YOLOv8-poseの出力順)

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import numpy as np
 
+
 def expand_box(
     box_xyxy: tuple[int, int, int, int],
     image_size: tuple[int, int],

@@ -6,6 +6,7 @@ src.pipeline.process_sequence のテスト
 実際の推論を含むE2E動作確認は `scripts/run_pose_estimation.py` を手動実行して行う
 """
 from pathlib import Path
+
 from src.pipeline import process_sequence
 
 

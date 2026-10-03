@@ -17,22 +17,30 @@ def test_load_jp0001_mc_sequence():
     assert first.camera_id == 0
 
 
-def test_available_frame_ids_returns_first_frame_of_jp0001():
-    """
-    JP0001の最初のフレーム(frame 63, 00063.jpg)のみを対象にしたテスト
+def test_available_frame_ids_includes_first_frame_of_jp0001():
+    """JP0001の最初のフレーム(frame 63)が必ず含まれることを確認する
 
-    現時点ではデモ用に frame 63 の画像のみを同梱
-    JP0001の全317フレーム, および将来的なJP0002〜JP0100を用いた
-    フルデータでの動作確認は別途行う
+    ローカル環境によって同梱されるフレーム数が異なりうるため, 
+    件数によらず常に成り立つべき性質だけを検証する. 
     """
     seq = SkiSequence.from_mc_dir(REPO_ROOT / "data" / "JP0001")
-
     available = seq.available_frame_ids()
-    assert available == [63]
 
-    first = seq.get(available[0])
-    assert first.frame_id == 63
-    assert seq.frame_path(63).exists()
+    # frame 63 は常に含まれるはず
+    assert 63 in available
+
+    # 返された各frame_idについて、実際に画像ファイルが存在すること
+    for frame_id in available:
+        assert seq.frame_path(frame_id).exists()
+
+    # 返されたframe_idはすべて、アノテーション(frames.txt)に含まれること
+    annotated_ids = {a.frame_id for a in seq}
+    assert set(available).issubset(annotated_ids)
+
+    # フルデータ(317フレーム)が揃っている場合は、317件すべて検出できること
+    if len(available) > 1:
+        assert len(available) == 317
+        assert available == sorted(available)
 
 
 def test_expand_box_clips_to_image_bounds():
