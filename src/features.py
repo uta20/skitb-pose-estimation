@@ -108,7 +108,7 @@ def extract_features(
     # 体幹の折れ角: 肩中点-腰中点-膝中点. 180度に近いほど体が伸びていることを意味する
     trunk_hip_angle = _angle_at_vertex(mid_shoulder, mid_hip, mid_knee)
 
-    # 脚のV字角: 腰から足首へのベクトルのなす角
+    # 脚のV字角: 腰の中点から足首へのベクトルのなす角
     leg_v_angle = None
     if left_hip is not None and right_hip is not None:
         hip_mid = _midpoint(left_hip, right_hip)
